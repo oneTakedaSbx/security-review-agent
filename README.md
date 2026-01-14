@@ -1,127 +1,141 @@
-# Security Review Agent
+# 🔒 Security Review Agent
+
+> A GitHub Copilot custom agent for identifying security vulnerabilities using SonarCloud rules and OWASP guidelines.
 
 [![DEVX-10](https://img.shields.io/badge/Jira-DEVX--10-blue)](https://onetakeda.atlassian.net/browse/DEVX-10)
+[![SonarCloud](https://img.shields.io/badge/SonarCloud-Rules-orange)](https://rules.sonarsource.com/)
+[![OWASP](https://img.shields.io/badge/OWASP-Top%2010-red)](https://owasp.org/Top10/)
 
-A GitHub Copilot extensibility agent that identifies potential security vulnerabilities using SonarCloud integration.
+## 📋 Overview
 
-## Features
+As defined in **DEVX-10**, this agent helps developers write more secure code by:
 
-- 🔍 **Scan code for common security vulnerabilities** - SQL injection, XSS, CSRF, etc.
-- 🛡️ **Suggest secure coding practices** - Based on OWASP guidelines
-- 🔐 **Identify sensitive data handling issues** - API keys, passwords, PII detection
-- 📋 **Recommend security best practices** - Authentication, authorization, encryption
-- ⚠️ **Flag potential injection vulnerabilities** - Command, SQL, LDAP, XPath injection
-- 📦 **Check for secure dependency usage** - CVE scanning via SonarCloud
+- ✅ Scanning code for common security vulnerabilities
+- ✅ Suggesting secure coding practices
+- ✅ Identifying sensitive data handling issues
+- ✅ Recommending security best practices
+- ✅ Flagging potential injection vulnerabilities
+- ✅ Checking for secure dependency usage
 
-## Architecture
+## 🚀 Quick Start
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    Security Review Agent                         │
-├─────────────────────────────────────────────────────────────────┤
-│  GitHub Copilot Chat Extension (@security-review)               │
-│       │                                                          │
-│       ├── MCP Server (SonarCloud Integration)                   │
-│       │    ├── Get project issues                               │
-│       │    ├── Get security hotspots                            │
-│       │    ├── Analyze code quality                             │
-│       │    └── Check dependencies (OWASP)                       │
-│       │                                                          │
-│       └── Built-in Security Analysis                            │
-│            ├── Pattern-based vulnerability detection            │
-│            ├── OWASP Top 10 checks                              │
-│            └── Sensitive data detection                         │
-└─────────────────────────────────────────────────────────────────┘
-```
+### Installation
 
-## Installation
+1. Ensure you have GitHub Copilot enabled in your VS Code
+2. The agent is automatically available org-wide through the `.github` repository
 
-### Prerequisites
-
-- Node.js 18+
-- GitHub Copilot license
-- SonarCloud account and token
-
-### Setup
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/oneTakedaSbx/security-review-agent.git
-   cd security-review-agent
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Configure environment variables:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your SonarCloud credentials
-   ```
-
-4. Build the agent:
-   ```bash
-   npm run build
-   ```
-
-### Configure VS Code MCP
-
-Add to your VS Code `settings.json` or `mcp.json`:
-
-```json
-{
-  "mcp": {
-    "servers": {
-      "security-review": {
-        "command": "node",
-        "args": ["path/to/security-review-agent/dist/mcp-server.js"],
-        "env": {
-          "SONARCLOUD_TOKEN": "your-token",
-          "SONARCLOUD_ORGANIZATION": "your-org"
-        }
-      }
-    }
-  }
-}
-```
-
-## Usage
+### Usage
 
 In GitHub Copilot Chat, use the `@security-review` agent:
 
 ```
-@security-review analyze this file for security vulnerabilities
-@security-review check for SQL injection risks
-@security-review scan dependencies for CVEs
-@security-review review authentication implementation
+@security-review /analyze
 ```
 
-## MCP Tools Available
+## 🎯 Available Commands
 
-| Tool | Description |
-|------|-------------|
-| `scan_vulnerabilities` | Scan code for OWASP Top 10 vulnerabilities |
-| `get_sonar_issues` | Fetch security issues from SonarCloud |
-| `get_security_hotspots` | Get security hotspots from SonarCloud |
-| `check_dependencies` | Check dependencies for known CVEs |
-| `analyze_sensitive_data` | Detect hardcoded secrets and PII |
-| `get_secure_recommendations` | Get secure coding recommendations |
+| Command | Description |
+|---------|-------------|
+| `/analyze` | Analyze selected code or workspace for vulnerabilities |
+| `/scan` | Comprehensive security scan of codebase |
+| `/check-dependencies` | Check for known CVEs in dependencies |
+| `/best-practices` | Get security recommendations for current context |
 
-## Development
+## 📊 Example Usage
 
-```bash
-# Run in development mode
-npm run dev
-
-# Run tests
-npm test
-
-# Lint code
-npm run lint
+### Analyze a specific file
+```
+@security-review /analyze src/auth/login.py
 ```
 
-## License
+### Scan entire workspace
+```
+@security-review /scan
+```
 
-MIT
+### Check dependencies
+```
+@security-review /check-dependencies
+```
+
+### Get best practices for API development
+```
+@security-review /best-practices for REST API authentication
+```
+
+## 🛡️ Security Categories Covered
+
+### OWASP Top 10 (2021)
+
+| Category | Coverage |
+|----------|----------|
+| A01: Broken Access Control | ✅ |
+| A02: Cryptographic Failures | ✅ |
+| A03: Injection | ✅ |
+| A04: Insecure Design | ✅ |
+| A05: Security Misconfiguration | ✅ |
+| A06: Vulnerable Components | ✅ |
+| A07: Auth Failures | ✅ |
+| A08: Software/Data Integrity | ✅ |
+| A09: Logging Failures | ✅ |
+| A10: SSRF | ✅ |
+
+### SonarCloud Rules Integration
+
+- **S3649** - SQL Injection
+- **S2076** - Command Injection
+- **S5131** - XSS
+- **S2068** - Hardcoded Credentials
+- **S4790** - Weak Hashing
+- **S5542** - Weak Encryption
+- **S5135** - Insecure Deserialization
+- **S2083** - Path Traversal
+- And many more...
+
+## 📈 Sample Output
+
+```
+## Security Analysis Report
+
+### Summary
+- 🔴 Critical: 1 issue
+- 🟠 High: 2 issues  
+- 🟡 Medium: 3 issues
+- 🔵 Low: 1 issue
+
+### Findings
+
+#### [CRITICAL] SQL Injection Vulnerability
+- **File:** `src/database/queries.py:45`
+- **Rule:** S3649
+- **Description:** User input directly concatenated into SQL query
+- **Recommendation:** Use parameterized queries
+```
+
+## 🔗 Integration with SonarCloud
+
+This agent is designed to complement your SonarCloud setup:
+
+1. **Development Time:** Use `@security-review` while coding
+2. **Pre-commit:** Quick security check before committing
+3. **CI/CD:** Full SonarCloud scan on PR/merge
+4. **Quality Gates:** Enforce standards with SonarCloud
+
+## 📚 Resources
+
+- [OWASP Top 10](https://owasp.org/Top10/)
+- [SonarCloud Security Rules](https://rules.sonarsource.com/)
+- [CWE Database](https://cwe.mitre.org/)
+- [NIST Guidelines](https://csrc.nist.gov/)
+
+## 🤝 Contributing
+
+Contributions welcome! Please read our contributing guidelines and submit PRs.
+
+## 📄 License
+
+MIT License - See [LICENSE](LICENSE) for details.
+
+---
+
+*Built for Takeda Developer Experience Platform (DEVX-10)*
